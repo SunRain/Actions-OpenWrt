@@ -92,8 +92,9 @@ jobs:
     - name: Build
       run: |
         cd openwrt
-        echo -e "$(nproc) thread build."
-        make -j$(nproc) V=s
+#        echo -e "$(nproc) thread build."
+#        make -j$(nproc) V=s
+        make -j1 V=s
 
     - name : Upload packages
       uses: actions/upload-artifact@master
