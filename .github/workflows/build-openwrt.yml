@@ -53,6 +53,8 @@ jobs:
       run: |
           git config --global user.name "SunRain"
           git config --global user.email "41245110@qq.com"
+          git clone "https://${GH_TOKEN}@${GH_REF}"
+          cd OpenWrt-binary
           mkdir `busybox date +%Y%m%d`
           cd `busybox date +%Y%m%d`
           touch test
