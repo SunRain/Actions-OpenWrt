@@ -46,11 +46,11 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
     
-    - name: Test 
-        env:
+    - name: bibibibi
+      env:
         GH_REF: github.com/SunRain/OpenWrt-binary.git # GitHub 仓库 SSH 地址
         GH_TOKEN: ${{ secrets.GH_TOKEN }} # 预先生成 GitHub Token
-        run: |
+      run: |
           git config --global user.name "SunRain"
           git config --global user.email "41245110@qq.com"
           mkdir `busybox date +%Y%m%d`
