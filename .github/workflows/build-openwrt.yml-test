@@ -45,69 +45,20 @@ jobs:
         sudo -E apt-get -qq clean
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-    - name: Clone source code
-      env: 
-        REPO_URL: https://github.com/coolsnowwolf/lede
-        REPO_BRANCH: master
-      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
-
-    - name: Load custom configuration
+    
+    - name: bibibibi
       env:
-        CONFIG_FILE: '.config'
-        DIY_SH: 'diy.sh'
+        GH_REF: github.com/SunRain/OpenWrt-binary.git # GitHub 仓库 SSH 地址
+        GH_TOKEN: ${{ secrets.GH_TOKEN }} # 预先生成 GitHub Token
       run: |
-        [ -e files ] && mv files openwrt/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x $DIY_SH
-        cd openwrt
-        ../$DIY_SH
-        make defconfig
-
-#    - name: SSH connection to Actions
-#      uses: P3TERX/debugger-action@master
-
-    - name: Download package
-      run: |
-        cd openwrt && make download -j8
-        find dl -size -1024c -exec ls -l {} \;
-        find dl -size -1024c -exec rm -f {} \;
-
-    - name: Multi-thread compile
-      run: |
-        cd openwrt
-        echo -e "$(nproc) thread compile"
-        make -j$(nproc)
-
-    - name: Single-thread compile
-      if: failure()
-      run: |
-        cd openwrt
-        make -j1 V=s
-
-    - name: Upload bin directory
-      uses: actions/upload-artifact@master
-      if: always()
-      with:
-        name: OpenWrt_bin
-        path: openwrt/bin
-
-    - name: Organize files
-      if: always()
-      run: |
-        cd openwrt/bin/targets/*/*
-        rm -rf packages
-        echo "::set-env name=FIRMWARE::$(pwd)"
-
-    - name: Upload firmware
-      uses: actions/upload-artifact@master
-      if: always()
-      with:
-        name: OpenWrt_firmware
-        path: ${{ env.FIRMWARE }}
+          git config --global user.name "SunRain"
+          git config --global user.email "41245110@qq.com"
+          git clone "https://${GH_TOKEN}@${GH_REF}"
+          cd OpenWrt-binary
+          mkdir `busybox date +%Y%m%d`
+          cd `busybox date +%Y%m%d`
+          touch test
+          cd ..
+          git add .
+          git commit -m "CI built at `date +"%Y-%m-%d %H:%M:%S"`"
+          git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
