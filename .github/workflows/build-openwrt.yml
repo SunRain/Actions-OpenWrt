@@ -79,17 +79,17 @@ jobs:
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
 
-    - name: Multi-thread compile
-      run: |
-        cd openwrt
-        echo -e "$(nproc) thread compile"
-        make -j$(nproc)
+    #- name: Multi-thread compile
+      #run: |
+        #cd openwrt
+        #echo -e "$(nproc) thread compile"
+        #make -j$(nproc)
 
-    - name: Single-thread compile
-      if: failure()
-      run: |
-        cd openwrt
-        make -j1 V=s
+    #- name: Single-thread compile
+      #if: failure()
+      #run: |
+        #cd openwrt
+        #make -j1 V=s
 
     #- name: Upload bin directory
       #uses: actions/upload-artifact@master
@@ -117,7 +117,10 @@ jobs:
         GH_REF: github.com/SunRain/OpenWrt-binary.git # GitHub 仓库 SSH 地址
         GH_TOKEN: ${{ secrets.GH_TOKEN }} # 预先生成 GitHub Token
       run: |
+          echo `pwd`
+          ls
           cd ~
+          ls
           git config --global user.name "SunRain"
           git config --global user.email "41245110@qq.com"
           git clone "https://${GH_TOKEN}@${GH_REF}"
