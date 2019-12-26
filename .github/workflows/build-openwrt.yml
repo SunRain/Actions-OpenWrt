@@ -122,7 +122,7 @@ jobs:
           git clone "https://${GH_TOKEN}@${GH_REF}"
           ls
           mkdir OpenWrt-binary/`busybox date +%Y%m%d`
-          cp openwrt/bin OpenWrt-binary/`busybox date +%Y%m%d`/bin
+          cp -r openwrt/bin OpenWrt-binary/`busybox date +%Y%m%d`
           cd OpenWrt-binary
           git add .
           git commit -m "CI built at `date +"%Y-%m-%d %H:%M:%S"`"
